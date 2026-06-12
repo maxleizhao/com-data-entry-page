@@ -1,0 +1,59 @@
+<%- include('../partials/header', { title: 'Operators' }) %>
+
+<h1>Operators</h1>
+
+<div class="operator-layout">
+  <div class="card">
+    <h2>Add Operator</h2>
+    <form action="/operators" method="POST" class="form">
+      <div class="form-group">
+        <label for="name">Operator Name</label>
+        <input type="text" id="name" name="name" required>
+      </div>
+      <div class="form-group">
+        <label for="project">Project / Form Type</label>
+        <select id="project" name="project" required>
+          <option value="">-- Select --</option>
+          <option value="baseline">Baseline</option>
+          <option value="pyrocks">Pyrocks</option>
+          <option value="donutech">DonuTech</option>
+          <option value="sg">SG</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Add Operator</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>Operator List</h2>
+    <% if (operators.length === 0) { %>
+      <p class="text-muted">No operators yet.</p>
+    <% } else { %>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Project</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% operators.forEach(op => { %>
+            <tr>
+              <td><%= op.name %></td>
+              <td><span class="badge badge-<%= op.project %>"><%= op.project %></span></td>
+              <td>
+                <form action="/operators/<%= op.id %>?_method=DELETE" method="POST" style="display:inline" onsubmit="return confirm('Delete operator?')">
+                  <button class="btn btn-sm btn-danger">Delete</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    <% } %>
+  </div>
+</div>
+</main>
+</body>
+</html>

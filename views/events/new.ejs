@@ -1,0 +1,21 @@
+<%- include('../partials/header', { title: 'New Event' }) %>
+
+<h1>New Event</h1>
+
+<form action="/events" method="POST" class="form">
+  <div class="form-group">
+    <label for="name">Event Name</label>
+    <input type="text" id="name" name="name" required>
+  </div>
+  <div class="form-group">
+    <label for="event_date">Event Date</label>
+    <input type="date" id="event_date" name="event_date" required>
+  </div>
+  <div class="form-actions">
+    <a href="/" class="btn">Cancel</a>
+    <button type="submit" class="btn btn-primary">Create Event</button>
+  </div>
+</form>
+</main>
+</body>
+</html>

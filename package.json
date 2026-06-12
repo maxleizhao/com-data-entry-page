@@ -1,0 +1,17 @@
+{
+  "name": "data-entry-app",
+  "version": "1.0.0",
+  "description": "Data entry application for data collection events",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.0.0",
+    "ejs": "^3.1.10",
+    "express": "^4.21.0",
+    "exceljs": "^4.4.0",
+    "method-override": "^3.0.0"
+  }
+}

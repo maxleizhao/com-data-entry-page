@@ -1,0 +1,77 @@
+<%- include('../partials/header', { title: event.name + ' - Pyrocks' }) %>
+
+<div class="page-header">
+  <h1>Pyrocks — <%= event.name %></h1>
+  <a href="/events/<%= event.id %>" class="btn">← Back to Event</a>
+</div>
+
+<div class="form-entry-layout">
+  <div class="card form-card">
+    <h2>New Entry</h2>
+    <form action="/events/<%= event.id %>/forms/pyrocks" method="POST" class="form">
+      <div class="form-group">
+        <label for="operator_id">Operator (who filled this form)</label>
+        <select id="operator_id" name="operator_id" required>
+          <option value="">-- Select Operator --</option>
+          <% operators.forEach(op => { %>
+            <option value="<%= op.id %>"><%= op.name %></option>
+          <% }) %>
+        </select>
+        <% if (operators.length === 0) { %>
+          <p class="text-warning">No pyrocks operators created. <a href="/operators">Add operators first</a>.</p>
+        <% } %>
+      </div>
+      <div class="form-group">
+        <label for="subject_id">Subject ID</label>
+        <input type="text" id="subject_id" name="subject_id" required>
+      </div>
+      <div class="form-group">
+        <label for="risk">Risk</label>
+        <select id="risk" name="risk" required>
+          <option value="">-- Select Risk --</option>
+          <option value="Low">Low</option>
+          <option value="Moderate">Moderate</option>
+          <option value="High">High</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Save Entry</button>
+    </form>
+  </div>
+
+  <div class="card records-card">
+    <h2>Records (<%= records.length %>)</h2>
+    <% if (records.length === 0) { %>
+      <p class="text-muted">No records yet.</p>
+    <% } else { %>
+      <div class="table-scroll">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Subject ID</th>
+              <th>Risk</th>
+              <th>Operator</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% records.forEach(r => { %>
+              <tr>
+                <td><%= r.subject_id %></td>
+                <td><span class="badge badge-risk-<%= r.risk.toLowerCase() %>"><%= r.risk %></span></td>
+                <td><%= r.operator_name %></td>
+                <td>
+                  <form action="/events/<%= event.id %>/records/pyrocks_records/<%= r.id %>?_method=DELETE" method="POST" onsubmit="return confirm('Delete?')">
+                    <button class="btn btn-sm btn-danger">✕</button>
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    <% } %>
+  </div>
+</div>
+</main>
+</body>
+</html>

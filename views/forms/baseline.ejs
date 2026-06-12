@@ -1,0 +1,120 @@
+<%- include('../partials/header', { title: event.name + ' - Baseline' }) %>
+
+<div class="page-header">
+  <h1>Baseline — <%= event.name %></h1>
+  <a href="/events/<%= event.id %>" class="btn">← Back to Event</a>
+</div>
+
+<div class="form-entry-layout">
+  <div class="card form-card">
+    <h2>New Entry</h2>
+    <form action="/events/<%= event.id %>/forms/baseline" method="POST" class="form" id="baseline-form">
+      <div class="form-group">
+        <label for="operator_id">Operator (who filled this form)</label>
+        <select id="operator_id" name="operator_id" required>
+          <option value="">-- Select Operator --</option>
+          <% operators.forEach(op => { %>
+            <option value="<%= op.id %>"><%= op.name %></option>
+          <% }) %>
+        </select>
+        <% if (operators.length === 0) { %>
+          <p class="text-warning">No baseline operators created. <a href="/operators">Add operators first</a>.</p>
+        <% } %>
+      </div>
+      <div class="form-group">
+        <label for="subject_id">Subject ID</label>
+        <input type="text" id="subject_id" name="subject_id" required>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="height">Height (cm)</label>
+          <input type="number" id="height" name="height" step="0.1" min="0" required oninput="calcBMI()">
+        </div>
+        <div class="form-group">
+          <label for="weight">Weight (kg)</label>
+          <input type="number" id="weight" name="weight" step="0.1" min="0" required oninput="calcBMI()">
+        </div>
+        <div class="form-group">
+          <label for="bmi_display">BMI (auto-calculated)</label>
+          <input type="text" id="bmi_display" readonly class="input-readonly" placeholder="—">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="waist_circumference">Waist Circumference (cm)</label>
+          <input type="number" id="waist_circumference" name="waist_circumference" step="0.1" min="0" required>
+        </div>
+        <div class="form-group">
+          <label for="hip_circumference">Hip Circumference (cm)</label>
+          <input type="number" id="hip_circumference" name="hip_circumference" step="0.1" min="0" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="grip_strength">Grip Strength (kg)</label>
+        <input type="number" id="grip_strength" name="grip_strength" step="0.1" min="0" required>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Save Entry</button>
+    </form>
+  </div>
+
+  <div class="card records-card">
+    <h2>Records (<%= records.length %>)</h2>
+    <% if (records.length === 0) { %>
+      <p class="text-muted">No records yet.</p>
+    <% } else { %>
+      <div class="table-scroll">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Subject ID</th>
+              <th>Height</th>
+              <th>Weight</th>
+              <th>BMI</th>
+              <th>Waist</th>
+              <th>Hip</th>
+              <th>Grip</th>
+              <th>Operator</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% records.forEach(r => { %>
+              <tr>
+                <td><%= r.subject_id %></td>
+                <td><%= r.height %></td>
+                <td><%= r.weight %></td>
+                <td><%= r.bmi %></td>
+                <td><%= r.waist_circumference %></td>
+                <td><%= r.hip_circumference %></td>
+                <td><%= r.grip_strength %></td>
+                <td><%= r.operator_name %></td>
+                <td>
+                  <form action="/events/<%= event.id %>/records/baseline_records/<%= r.id %>?_method=DELETE" method="POST" onsubmit="return confirm('Delete?')">
+                    <button class="btn btn-sm btn-danger">✕</button>
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    <% } %>
+  </div>
+</div>
+
+<script>
+function calcBMI() {
+  const h = parseFloat(document.getElementById('height').value);
+  const w = parseFloat(document.getElementById('weight').value);
+  const el = document.getElementById('bmi_display');
+  if (h > 0 && w > 0) {
+    const bmi = (w / ((h/100)*(h/100))).toFixed(1);
+    el.value = bmi;
+  } else {
+    el.value = '';
+  }
+}
+</script>
+</main>
+</body>
+</html>
